@@ -5,9 +5,6 @@ import java.io.Serializable;
 import java.net.Socket;
 import java.util.function.Consumer;
 
-
-
-
 public class Client extends Thread{
 
 	
@@ -16,7 +13,7 @@ public class Client extends Thread{
 	ObjectOutputStream out;
 	ObjectInputStream in;
 	private String ipAddress; //"127.0.0.1"
-	private int portNumber; //5555
+	private int portNumber; //8080
 	String roundOver = "";
 	String message = "";
 	
@@ -50,13 +47,11 @@ public class Client extends Thread{
 	
     }
 	
-	public void send(char data) {
-		
+	public void send(char data) {		
 		try {
 			out.writeObject(data);
 			out.reset();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
+		} catch (IOException e) {			
 			e.printStackTrace();
 		}
 	}
