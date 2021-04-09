@@ -6,7 +6,6 @@ import java.net.Socket;
 import java.util.function.Consumer;
 
 public class Client extends Thread{
-
 	
 	Socket socketClient;
 	
@@ -26,7 +25,6 @@ public class Client extends Thread{
 	}
 	
 	public void run() {
-		
 		try {
 		socketClient= new Socket(ipAddress, portNumber);
 	    out = new ObjectOutputStream(socketClient.getOutputStream());
@@ -34,7 +32,6 @@ public class Client extends Thread{
 	    socketClient.setTcpNoDelay(true);
 		}
 		catch(Exception e) {}
-		
 		while(true) {
 			try {
 			message = in.readObject().toString();

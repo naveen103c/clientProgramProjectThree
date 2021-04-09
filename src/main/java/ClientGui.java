@@ -20,7 +20,6 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import javafx.util.Duration;
@@ -34,8 +33,6 @@ public class ClientGui extends Application {
     HashMap<String, Scene> sceneMap;
     @FXML
     private GridPane gridPane = new GridPane(); // creates a grid pane
-
-//	HangmanLogic logic;
     int wordSize;
     char[] displayWord;
     String displayString;
@@ -51,10 +48,10 @@ public class ClientGui extends Application {
     private Button[][] arr = new Button[13][2];
     private EventHandler<ActionEvent> myHandler;
     int cat = 0;
-    private Image bg; //The image used for the background
+    private Image bg;
     private ImageView bgView;
     readFromClient reader = new readFromClient();
-    BorderPane bp;	// new for how to play
+    BorderPane bp;
 
     class readFromClient implements Serializable {
 
@@ -77,7 +74,6 @@ public class ClientGui extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         primaryStage.setTitle("Client GUI");
-
         t1 = new TextField("Please Enter The IpAddress");
         t1.setText("127.0.0.1");
         t2 = new TextField("Please Enter The portNumber");
@@ -85,16 +81,11 @@ public class ClientGui extends Application {
         s1 = new TextField();
         bp = new BorderPane();
         howToPlayBtn = new Button("How To Play");
-        //howToPlayBtn.setStyle("-fx-background-color:red;");
         playAgainBtn = new Button("Play Again");
         ExitBtn = new Button("Exit");
-        //ExitBtn.setStyle("-fx-background-color:red;");
         cat1 = new Button("Food Catagory");
-        //cat1.setStyle("-fx-background-color:gold;");
         cat2 = new Button("Countries Catagory");
-        //cat2.setStyle("-fx-background-color:aqua;");
         cat3 = new Button("Sport Catagory");
-        //cat3.setStyle("-fx-background-color:lawngreen;");
         howToPlayBtn.setStyle("-fx-text-fill: white;-fx-font-weight: bold;-fx-background-color: gray;-fx-font-size:18");
         playAgainBtn.setStyle("-fx-text-fill: white;-fx-font-weight: bold;-fx-background-color: gray;-fx-font-size:18");
         ExitBtn.setStyle("-fx-text-fill: white;-fx-font-weight: bold;-fx-background-color: #b91428;-fx-font-size:18");
@@ -121,7 +112,7 @@ public class ClientGui extends Application {
                     });
                     clientConnection.setUpdates(reader);
                     String s = reader.gamePhase;
-                    if (s.equals("Sorry, you Lost The Game")) {
+                    if (s.equals("You Lost The Game")) {
                         disableAll();
                         pause2.setOnFinished(z -> {
                             clientMenuScene = createGameOverGui("You Lost!");
@@ -131,7 +122,7 @@ public class ClientGui extends Application {
                         });
                         pause2.play();
 
-                    } else if (s.equals("Congratulations.. You Won The Game!")) {
+                    } else if (s.equals("You Won The Game!")) {
                         disableAll();
                         pause2.setOnFinished(z -> {
                             clientMenuScene = createGameOverGui("You Won!");
@@ -140,19 +131,19 @@ public class ClientGui extends Application {
                             listItems2.getItems().clear();
                         });
                         pause2.play();
-                    } else if (s.equals("Congratulations.. You Beat Category: 1")) {
+                    } else if (s.equals("You Beat Category: 1")) {
                         disableAll();
                         cat1.setDisable(true);
                         pause2.play();
-                    } else if (s.equals("Congratulations.. You Beat Category: 2")) {
+                    } else if (s.equals("You Beat Category: 2")) {
                         disableAll();
                         cat2.setDisable(true);
                         pause2.play();
-                    } else if (s.equals("Congratulations.. You Beat Category: 3")) {
+                    } else if (s.equals("You Beat Category: 3")) {
                         disableAll();
                         cat3.setDisable(true);
                         pause2.play();
-                    } else if (s.substring(0, 8).equals("Sorry... You Lost")) {
+                    } else if (s.substring(0, 8).equals("You Lost")) {
                         disableAll();
                         pause2.play();
                     }
@@ -172,13 +163,13 @@ public class ClientGui extends Application {
                 portNumber = Integer.parseInt(t2.getText());
                 ipAddress = t1.getText();
                 System.out.println(ipAddress + " " + portNumber);
-
                 clientConnection = new Client(data -> {
                     Platform.runLater(() -> {
                         listItems2.getItems().add(data.toString());
                     });
                 }, ipAddress, portNumber);
                 clientConnection.start();
+                //naveen
                 startScene = createCatGui();
                 sceneMap.put("client", startScene);
                 primaryStage.setScene(startScene);
@@ -254,7 +245,6 @@ public class ClientGui extends Application {
         addGrid(gridPane);
         primaryStage.setScene(startScene);
         primaryStage.show();
-
     }
 
     public void disableAll() {
@@ -266,28 +256,46 @@ public class ClientGui extends Application {
         }
     }
 
+     // client login GUI
+    public Scene createLoginGui() {
+        BorderPane bp = new BorderPane();
+        bg = new Image("guesstheword.png");
+        bgView = new ImageView(bg);
+        login.setText("LOGIN");
+        t1.setStyle("-fx-text-fill: green;-fx-font-size:20");
+        t2.setStyle("-fx-text-fill: green;-fx-font-size:20");
+        t1.setMaxWidth(150);
+        t2.setMaxWidth(150);
+        login.setStyle("-fx-text-fill: white;-fx-font-weight: bold;-fx-background-color: gray;-fx-font-size:20");
+        VBox vb = new VBox(10, bgView, t1, t2, login);
+        vb.setAlignment(Pos.CENTER);
+        bp.setPadding(new Insets(20));
+        bp.setCenter(vb);
+        bp.setStyle("-fx-background-color: linear-gradient(#61a2b1, #2A5058)");
+        return new Scene(bp, 700, 700);
+    }
+    
     // home menu GUI
     public Scene createCatGui() {
         BorderPane bp = new BorderPane();
         HBox hb = new HBox(10, cat1, cat2, cat3);
+        hb.setAlignment(Pos.CENTER);
         bp.setPadding(new Insets(20));
-        Label label1 = new Label("CHOOSE A CATEGORY");
-        Label label2 = new Label("GUESS THE WORD");
-        bg = new Image("guesstheword.jpg");
+        Label label1 = new Label("CHOOSE A CATEGORY");                
+        bg = new Image("guesstheword.png");
         bgView = new ImageView(bg);
-        Label label3 = new Label("DEVELOPED BY\nAp\npq");
+        Label label3 = new Label("DEVELOPED BY\n\nNaveen Chaudhary\n\n\n\n");
         TextField t = new TextField("Pick a Catagory");
         t.setEditable(false);
-        label1.setStyle("-fx-text-fill: green;-fx-font-size:20");
-        label2.setStyle("-fx-text-fill: black;-fx-font-size:15");
-        label3.setStyle("-fx-text-fill: black;-fx-font-size:15");
+        label1.setStyle("-fx-text-fill: green;-fx-font-size:30;-fx-font-weight: bold;");        
+        label3.setStyle("-fx-text-fill: black;-fx-font-size:20");
         t.setStyle("-fx-text-fill: green; -fx-font-size:20");
-        ExitBtn.setStyle("-fx-text-fill: red;-fx-font-weight: bold;-fx-background-color: gray;-fx-font-size:20");
-        VBox hbExit = new VBox(10, label1, hb, howToPlayBtn, bgView,label2, label3, ExitBtn);
+        ExitBtn.setStyle("-fx-text-fill: white;-fx-font-weight: bold;-fx-background-color: red;-fx-font-size:20");
+        VBox hbExit = new VBox(10, label1, hb, howToPlayBtn, bgView, label3, ExitBtn);
         hbExit.setAlignment(Pos.CENTER);
         bp.setCenter(hbExit);
-        bp.setStyle("-fx-background-color: white");
-        return new Scene(bp, 900, 700);
+        bp.setStyle("-fx-background-color: linear-gradient(#61a2b1, #2A5058)");
+        return new Scene(bp, 700, 700);
     }
 
     public void resetCat() {
@@ -296,40 +304,24 @@ public class ClientGui extends Application {
         cat3.setDisable(false);
     }
 
-    // client login GUI
-    public Scene createLoginGui() {
-        BorderPane bp = new BorderPane();
-        bg = new Image("client.jpg");
-        bgView = new ImageView(bg);
-        login.setText("LOGIN");
-        t1.setStyle("-fx-text-fill: green;-fx-font-size:20");
-        t2.setStyle("-fx-text-fill: green;-fx-font-size:20");
-        login.setStyle("-fx-text-fill: white;-fx-font-weight: bold;-fx-background-color: gray;-fx-font-size:20");
-        VBox vb = new VBox(10, bgView, t1, t2, login);
-        vb.setAlignment(Pos.CENTER);
-        bp.setPadding(new Insets(70));
-        bp.setBottom(vb);
-        bp.setStyle("-fx-background-color: linear-gradient(#61a2b1, #2A5058)");
-        return new Scene(bp, 500, 500);
-    }
-
     // gameplay GUI
     public Scene createPlayGui() {
         resetGrid(gridPane);
         clientBox = new VBox(10, gridPane, listItems2);
-        clientBox.setPadding(new Insets(20));
-        clientBox.setStyle("-fx-background-color: white");
-        return new Scene(clientBox, 700, 700);
+        clientBox.setPadding(new Insets(10));
+        clientBox.setStyle("-fx-background-color: linear-gradient(#61a2b1, #2A5058)");
+        return new Scene(clientBox, 700, 500);
     }
 
     // how to play GUI
     public Scene createHowToPlayGui() {
         BorderPane bp = new BorderPane();
-        bg = new Image("howToPlay.jpg");
+        bg = new Image("howTo.jpg");
         bgView = new ImageView(bg);
         bp.getChildren().addAll(bgView);
-        bp.setBottom(backToMenuBtn);
-        return new Scene(bp, 700, 700);
+        backToMenuBtn.setStyle("-fx-text-fill: white;-fx-font-weight: bold;-fx-background-color: #b91428;-fx-font-size:18");
+        bp.setTop(backToMenuBtn);
+        return new Scene(bp, 900, 433);
     }
 
     // Game Over GUI
@@ -340,9 +332,14 @@ public class ClientGui extends Application {
         bp.getChildren().addAll(bgView);
         clientBox.setPadding(new Insets(100));
         s1.setText(s);
+        s1.setMaxWidth(150);
+        s1.setAlignment(Pos.CENTER);
+        s1.setStyle("-fx-text-fill: green; -fx-font-size:20");
+        playAgainBtn.setStyle("-fx-text-fill: white;-fx-font-weight: bold;-fx-background-color: #b91428;-fx-font-size:18");
+        ExitBtn.setStyle("-fx-text-fill: white;-fx-font-weight: bold;-fx-background-color: #b91428;-fx-font-size:18");
         clientBox = new VBox(10, playAgainBtn, ExitBtn, s1);
+        clientBox.setAlignment(Pos.CENTER);
         bp.setCenter(clientBox);
-//		bp.setStyle("-fx-background-color: black");
         return new Scene(bp, 700, 700);
     }
 
