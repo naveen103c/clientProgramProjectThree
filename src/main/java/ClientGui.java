@@ -284,7 +284,7 @@ public class ClientGui extends Application {
         Label label1 = new Label("CHOOSE A CATEGORY");                
         bg = new Image("guesstheword.png");
         bgView = new ImageView(bg);
-        Label label3 = new Label("DEVELOPED BY\n\nNaveen Chaudhary\n\n\n\n");
+        Label label3 = new Label("DEVELOPED BY\n\nAnupreet Paulker\nAvi Bhatnagar\n\n\n");
         TextField t = new TextField("Pick a Catagory");
         t.setEditable(false);
         label1.setStyle("-fx-text-fill: green;-fx-font-size:30;-fx-font-weight: bold;");        
