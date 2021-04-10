@@ -1,4 +1,3 @@
-
 import java.io.Serializable;
 import java.util.HashMap;
 import javafx.fxml.FXML;
@@ -29,7 +28,7 @@ public class ClientGui extends Application {
     @FXML
     private TextField t1, t2;
     private String ipAddress; //"127.0.0.1"
-    private int portNumber; //5555
+    private int portNumber; //8080
     HashMap<String, Scene> sceneMap;
     @FXML
     private GridPane gridPane = new GridPane(); // creates a grid pane
